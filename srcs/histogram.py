@@ -1,44 +1,74 @@
-import sys
-import os
 from matplotlib import pyplot
 
 from describe import extract, clean
 
-def filter_feature_by_category(data: dict[str, list[int | float]],
-                               target: list[int],
-                               target_labels: dict[str, int],
-                               feature: str,
-                               category: str,
-                               ):
+def get_target_feature(headers: list[str], raw: list[list]):
     
-    feature_data = data[feature]
+    target_feature = "Hogwarts House"
     
-    encoded_target = target_labels[category]
+    idx = headers.index(target_feature)
     
-    ret = []
-    
-    for t, v in zip(target, feature_data):
-        
-        if t == encoded_target:
-            ret.append(v)
+    return [row[idx] for row in raw]
 
-    return ret
+def categorise_rows(target_data: list[str]):
+    
+    classes = {
+        "Gryffindor": [],
+        "Ravenclaw": [],
+        "Slytherin": [],
+        "Hufflepuff": []
+    }
+    
+    for i, val in enumerate(target_data):
+        
+        classes[val].append(i)
+    
+    return classes
 
 def main():
-    
-    if len(sys.argv) != 2:
-        return print("Wrong number of arguments")
-    
-    if not os.path.isfile(sys.argv[-1]) or sys.argv[-1].split('.')[-1] != 'csv':
-        return print(f"Invalid file")
 
-    extracted = extract(sys.argv[-1])
+    headers, extracted = extract("../datasets/dataset_train.csv")
+
+    cleaned_headers, cleaned = clean(headers, extracted)
+
+    target_data = get_target_feature(headers, extracted)
     
-    target, target_labels, cleaned = clean(extracted)
+    classes = categorise_rows(target_data)
     
-    l = filter_feature_by_category(cleaned, target, target_labels, "Astronomy", "Ravenclaw")
-    g = filter_feature_by_category(cleaned, target, target_labels, "Astronomy", "Hufflepuff")
+    num_features = len(cleaned_headers)
+    num_classes = len(classes)
+    
+    subplot_size = 3
+    fig_width = num_features * subplot_size
+    fig_height = (num_classes + 1) * subplot_size
+    fig, axs = pyplot.subplots(num_classes + 1, num_features, figsize=(fig_width, fig_height))
+    
+    plot_color = ["red", "deepskyblue", "springgreen", "gold"]
+    
+    for j, feature in enumerate(cleaned_headers):
+        
+        for i, (house, indices) in enumerate(classes.items()):
+            
+            data = [cleaned[k][j] for k in indices]
+        
+            axs[i, j].hist(data, color=plot_color[i])
+            axs[i, j].set_title(f"{house} - {feature}", fontsize=8)
+            axs[i, j].set_xticks([])
+            axs[i, j].set_yticks([])
+
+            axs[4, j].hist(data, color=plot_color[i], alpha=0.5)
+        
+        axs[4, j].set_title(feature, fontsize=8)
+        axs[4, j].set_xticks([])
+        axs[4, j].set_yticks([])
+
+    pyplot.subplots_adjust(left=0.05, bottom=0.05, right=0.95, top=0.95,
+                           wspace=0.5, hspace=0.5)
+    
+    pyplot.savefig("../assets/histogram.png")
+    
+    
 
 if __name__ == "__main__":
-    
+
     main()
