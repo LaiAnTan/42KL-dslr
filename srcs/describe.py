@@ -5,27 +5,18 @@ from typing import Callable, Optional
 
 from stats import Statistics
 
-missing_count = 0
 
-def label_encoder(data: list[str]) -> list[int]:
+class Dataset:
     
-    """
-    Unused for now
-    """
-    
-    unique = list(set(data))
-    
-    labels = {}
-    
-    for i, label in enumerate(unique):
+    def __init__(self, path: str) -> None:
         
-        labels[label] = i
-    
-    for i, entry in enumerate(data):
-        
-        data[i] = labels[entry]
-    
-    return labels, data
+        self.path = path
+        self.headers = []
+        self.raw = []
+
+    # move get_feature, extract, describe into this class
+
+missing_count = 0
 
 def get_feature(headers: list[str], data: list[list], feature: str) -> list:
     

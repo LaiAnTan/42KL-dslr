@@ -2,6 +2,7 @@ from matplotlib import pyplot
 
 from describe import extract, clean
 from histogram import categorise_rows, get_target_feature
+from stats import Statistics
 
 def main():
 
@@ -28,8 +29,6 @@ def main():
             
             axs[x, y].set_ylabel(x_feature, fontsize=8)
             axs[x, y].set_xlabel(y_feature, fontsize=8)
-            axs[x, y].set_xticks([])
-            axs[x, y].set_yticks([])
             
             if x == y:
                 
@@ -44,6 +43,7 @@ def main():
                     
                     x_data = [cleaned[i][x] for i in indices]
                     y_data = [cleaned[i][y] for i in indices]
+    
                     axs[x, y].scatter(x_data, y_data, color=plot_color[i], alpha=0.5, label=house)
             
             axs[x, y].legend(loc='upper right', fontsize='x-small')
