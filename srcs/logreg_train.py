@@ -1,29 +1,42 @@
 
 from dataset import Dataset
-from gd import GradientDescent, Batch, MiniBatch, Stochastic
-from regression import LogisticRegression
+from ovr import OneVsRestClassifier
 
 def main():
     
-    target_feature = "Hogwarts House"
-    remove_features = ["Index", "First Name", "Last Name", "Birthday", "Best Hand"]
+    ds_train = Dataset("datasets/dataset_train.csv")
+    ds_test = Dataset("datasets/dataset_test.csv")
+    feature_per_class = {
+        "Gryffindor": "Flying", # "History of Magic", "Transfiguration"
+        "Hufflepuff": "Ancient Runes",
+        "Ravenclaw": "Charms", # "Muggle Studies"
+        "Slytherin": "Divination" 
+    }
+    features = ["Arithmancy",
+                "Astronomy",
+                "Herbology",
+                "Defense Against the Dark Arts",
+                "Divination",
+                "Muggle Studies",
+                "Ancient Runes",
+                "History of Magic",
+                "Transfiguration",
+                "Potions",
+                "Care of Magical Creatures",
+                "Charms",
+                "Flying"]
     
-    ds = Dataset("datasets/dataset_train.csv")
-    ds.clean(target_feature, remove_features)
+    ovr = OneVsRestClassifier(ds_train, "Hogwarts House", feature_per_class)
     
-    model = LogisticRegression
-    algo = MiniBatch
-    lr = 0.1
-    epochs = 100
-    debug = True
+    ovr.fit_models()
     
-    gd = GradientDescent(model, algo, lr, epochs, debug);
+    ds_test.clean("Hogwarts House", features)
+    test_data = ds_test.get_cleaned_data()
     
-    data = []
-
-    w, b = gd.fit(data)
+    # ovr.save()
+    for i, sample in enumerate(test_data):
+        print(f"{i},{ovr.predict(sample, ds_test.get_cleaned_headers())}")
     
-    print(w, b)
 
 if __name__ == "__main__":
     

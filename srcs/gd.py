@@ -13,8 +13,9 @@ class GradientDescentAlgorithm(ABC):
         self.epochs = epochs
         self.reg_model = reg_model
         self.debug = debug
-        self.w = None
-        self.b = None
+        self.w = self.reg_model.w
+        self.b = self.reg_model.b
+        self.last_cost = 0
     
     @abstractmethod
     def run(self, data: list[float, float]):
@@ -39,16 +40,17 @@ class Batch(GradientDescentAlgorithm):
             w_grad /= sample_count
             b_grad /= sample_count
 
-            self.w -= self.learning_rate * w_grad
-            self.b -= self.learning_rate * b_grad
+            self.w -= self.lr * w_grad
+            self.b -= self.lr * b_grad
 
+            cost = self.reg_model.cost(data)
+            self.last_cost = cost
             if self.debug:
-                cost = self.reg_model.cost(data)
                 print(f"Epoch: {step} - Cost: {cost}")
             
             self.reg_model.update(self.w, self.b)
         
-        print("Complete")
+        print(f"Complete - Cost: {self.last_cost}")
 
 class MiniBatch(GradientDescentAlgorithm):
 
@@ -77,16 +79,17 @@ class MiniBatch(GradientDescentAlgorithm):
                 w_grad /= curr_batch_size
                 b_grad /= curr_batch_size
             
-                self.w -= self.learning_rate * w_grad
-                self.b -= self.learning_rate * b_grad
+                self.w -= self.lr * w_grad
+                self.b -= self.lr * b_grad
 
                 self.reg_model.update(self.w, self.b)
 
+            cost = self.reg_model.cost(data)
+            self.last_cost = cost
             if self.debug:
-                cost = self.reg_model.cost(data)
                 print(f"Epoch: {step} - Cost: {cost}")
             
-        print("Complete")
+        print(f"Complete - Cost: {self.last_cost}")
 
 class Stochastic(GradientDescentAlgorithm):
     
@@ -97,24 +100,20 @@ class Stochastic(GradientDescentAlgorithm):
     def run(self, data: list[tuple[float, float]]):
 
         for step in range(1, self.epochs + 1):
-            
-            w_grad = 0  # d Cost / dw
-            b_grad = 0  # d Cost / db
 
             for x, y in data:
-                w_grad += self.reg_model.dC_dw(x, y)
-                b_grad += self.reg_model.dC_db(x, y)
 
-                self.w -= self.learning_rate * w_grad
-                self.b -= self.learning_rate * b_grad
+                self.w -= self.lr * self.reg_model.dC_dw(x, y)
+                self.b -= self.lr * self.reg_model.dC_db(x, y)
                 
                 self.reg_model.update(self.w, self.b)
 
+            cost = self.reg_model.cost(data)
+            self.last_cost = cost
             if self.debug:
-                cost = self.reg_model.cost(data)
                 print(f"Epoch: {step} - Cost: {cost}")
             
-        print("Complete")
+        print(f"Complete - Cost: {self.last_cost}")
 
 class GradientDescent:
     
@@ -132,7 +131,8 @@ class GradientDescent:
         
         
         self.model = model(init_weight, init_bias)
-        self.algorithm = algorithm(learning_rate, epochs, model, debug)
+        
+        self.algorithm = algorithm(learning_rate, epochs, self.model, debug)
     
     def fit(self, data: list[tuple[float, float]]):
         

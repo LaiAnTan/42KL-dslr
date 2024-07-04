@@ -54,6 +54,8 @@ class Dataset:
         self.path = path
         self.headers = []
         self.data = []
+        self.cleaned_data = []
+        self.cleaned_headers = []
         self.target = []
         
         with open(path) as file:
@@ -74,7 +76,7 @@ class Dataset:
 
         return [row[index] for row in self.data]
     
-    def clean(self, target_feature, remove_features):
+    def clean(self, target_feature, include_features):
     
         """
         Function that cleans the dataset by removing unwanted features.
@@ -89,16 +91,15 @@ class Dataset:
         
         global missing_count
 
-        ignore_idxs = set()
+        self.cleaned_data = []
+        self.cleaned_headers = []
+
+        include_idxs = set()
         
         target_idx = self.headers.index(target_feature)
         
-        ignore_idxs.add(target_idx)
-        
-        for feature in remove_features:
-            ignore_idxs.add(self.headers.index(feature))
-        
-        cleaned = []
+        for feature in include_features:
+            include_idxs.add(self.headers.index(feature))
         
         for row in self.data:
             
@@ -107,8 +108,7 @@ class Dataset:
 
             for i, val in enumerate(row):
                 
-                
-                if i in ignore_idxs:
+                if i not in include_idxs:
                     continue
                 
                 #! handle missing values here
@@ -119,15 +119,10 @@ class Dataset:
                 
                 cleaned_row.append(val)
             
-            cleaned.append(cleaned_row)
-        
-        cleaned_header = []
+            self.cleaned_data.append(cleaned_row)
         
         for i in range(len(self.headers)):
-            cleaned_header.append(self.headers[i]) if i not in ignore_idxs else None
-
-        self.headers = cleaned_header
-        self.data = cleaned
+            self.cleaned_headers.append(self.headers[i]) if i in include_idxs else None
 
     def describe(self):
         
@@ -149,3 +144,18 @@ class Dataset:
                 rows[i].append(val[i])
         
         print(tabulate(rows, headers=["Metric"] + self.headers, numalign="right"))
+    
+    def get_data(self):
+        return self.data
+    
+    def get_headers(self):
+        return self.headers
+    
+    def get_target(self):
+        return self.target
+    
+    def get_cleaned_data(self):
+        return self.cleaned_data
+    
+    def get_cleaned_headers(self):
+        return self.cleaned_headers

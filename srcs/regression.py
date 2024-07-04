@@ -32,6 +32,9 @@ class RegressionModel(ABC):
     @abstractmethod
     def dC_db(self, x, y):
         pass
+    
+    def __str__(self) -> str:
+        return f"weight: {self.w}, bias: {self.b}"
 
 class LogisticRegression(RegressionModel):
     

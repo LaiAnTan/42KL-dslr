@@ -12,10 +12,22 @@ def main():
         return print(f"Invalid file")
     
     target_feature = "Hogwarts House"
-    remove_features = ["Index", "First Name", "Last Name", "Birthday", "Best Hand"]
+    include_features = ["Arithmancy",
+                        "Astronomy",
+                        "Herbology",
+                        "Defense Against the Dark Arts",
+                        "Divination",
+                        "Muggle Studies",
+                        "Ancient Runes",
+                        "History of Magic",
+                        "Transfiguration",
+                        "Potions",
+                        "Care of Magical Creatures",
+                        "Charms",
+                        "Flying"]
     
     ds = Dataset(sys.argv[-1])
-    ds.clean(target_feature, remove_features)
+    ds.clean(target_feature, include_features)
     ds.describe()
 
 if __name__ == "__main__":
