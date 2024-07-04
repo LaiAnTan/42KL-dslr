@@ -12,6 +12,8 @@ def main():
         "Ravenclaw": "Charms", # "Muggle Studies"
         "Slytherin": "Divination" 
     }
+    
+    target_feature = "Hogwarts House"
     features = ["Arithmancy",
                 "Astronomy",
                 "Herbology",
@@ -26,16 +28,18 @@ def main():
                 "Charms",
                 "Flying"]
     
+    ds_train.clean(target_feature, features)
+    
     ovr = OneVsRestClassifier(ds_train, "Hogwarts House", feature_per_class)
     
     ovr.fit_models()
     
-    ds_test.clean("Hogwarts House", features)
-    test_data = ds_test.get_cleaned_data()
+    # ds_test.clean(None, features)
+    # test_data = ds_test.get_data()
     
-    # ovr.save()
-    for i, sample in enumerate(test_data):
-        print(f"{i},{ovr.predict(sample, ds_test.get_cleaned_headers())}")
+    # # ovr.save()
+    # for i, sample in enumerate(test_data):
+    #     print(f"{i},{ovr.predict(sample, ds_test.get_cleaned_headers())}")
     
 
 if __name__ == "__main__":

@@ -54,8 +54,6 @@ class Dataset:
         self.path = path
         self.headers = []
         self.data = []
-        self.cleaned_data = []
-        self.cleaned_headers = []
         self.target = []
         
         with open(path) as file:
@@ -91,12 +89,13 @@ class Dataset:
         
         global missing_count
 
-        self.cleaned_data = []
-        self.cleaned_headers = []
+        cleaned_data = []
+        cleaned_headers = []
 
         include_idxs = set()
         
-        target_idx = self.headers.index(target_feature)
+        if target_feature is not None:
+            target_idx = self.headers.index(target_feature)
         
         for feature in include_features:
             include_idxs.add(self.headers.index(feature))
@@ -119,10 +118,13 @@ class Dataset:
                 
                 cleaned_row.append(val)
             
-            self.cleaned_data.append(cleaned_row)
+            cleaned_data.append(cleaned_row)
         
         for i in range(len(self.headers)):
-            self.cleaned_headers.append(self.headers[i]) if i in include_idxs else None
+            cleaned_headers.append(self.headers[i]) if i in include_idxs else None
+
+        self.data = cleaned_data
+        self.headers = cleaned_headers
 
     def describe(self):
         
@@ -153,9 +155,3 @@ class Dataset:
     
     def get_target(self):
         return self.target
-    
-    def get_cleaned_data(self):
-        return self.cleaned_data
-    
-    def get_cleaned_headers(self):
-        return self.cleaned_headers

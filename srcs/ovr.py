@@ -50,15 +50,10 @@ class OneVsRestClassifier:
             print(f"Fitting class {c}: {self.feature_per_class[c]}")
             
             # for each class, we build a logreg model -> C vs not C
-            
-            self.dataset.clean(target_feature=self.target,
-                               include_features=[self.feature_per_class[c]])
-            
             encode = lambda target: 1 if target == c else 0
             
-            data = self.dataset.get_cleaned_data()
-            target = self.dataset.get_target()
-            data = [(row[0], encode(target[i])) for i, row in enumerate(data)]
+            data = list(zip(self.dataset.get_feature(self.feature_per_class[c]),
+                            map(encode, self.dataset.get_target())))
             data = normalize_x(data)
             
             self.models[c].fit(data)
@@ -80,7 +75,7 @@ class OneVsRestClassifier:
             
         print(prediction)
 
-def build_all_features(dataset):
+def build_all_features(dataset: Dataset):
     
     target_feature = "Hogwarts House"
     classes = ["Gryffindor", "Hufflepuff", "Ravenclaw", "Slytherin"]
@@ -118,6 +113,8 @@ def build_all_features(dataset):
         data = [((row[0] - x_mean) / x_std, row[1]) for row in data]
         
         return data
+    
+    dataset.clean(target_feature, features)
 
     for i, c in enumerate(classes):
         
@@ -128,17 +125,12 @@ def build_all_features(dataset):
             print(f"Fitting class {c} - {feature}")
             
             # for each class, we build a logreg model -> C vs not C
-            
-            dataset.clean(target_feature=target_feature, include_features=[feature])
-            
             encode = lambda target: 1 if target == c else 0
             
-            data = dataset.get_cleaned_data()
+            data = dataset.get_feature(feature)
             target = dataset.get_target()
-            data = [(row[0], encode(target[i])) for i, row in enumerate(data)]
+            data = [(val, encode(target[i])) for i, val in enumerate(data)]
             data = normalize_x(data)
-            
-            # print(f"{c}: {data}")
             
             m.fit(data)
             print(f"weight: {m.get_weight()}")
@@ -162,5 +154,5 @@ def build_all_features(dataset):
 if __name__ == "__main__":
     
     ds = Dataset("datasets/dataset_train.csv")
-    
+
     build_all_features(ds)

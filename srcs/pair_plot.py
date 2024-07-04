@@ -1,20 +1,34 @@
 from matplotlib import pyplot
 
-from describe import extract, clean
-from histogram import categorise_rows, get_target_feature
-from stats import Statistics
+from dataset import Dataset
+from histogram import categorise_rows
 
 def main():
 
-    headers, extracted = extract("datasets/dataset_train.csv")
+    target_feature = "Hogwarts House"
+    features = ["Arithmancy",
+                "Astronomy",
+                "Herbology",
+                "Defense Against the Dark Arts",
+                "Divination",
+                "Muggle Studies",
+                "Ancient Runes",
+                "History of Magic",
+                "Transfiguration",
+                "Potions",
+                "Care of Magical Creatures",
+                "Charms",
+                "Flying"]
 
-    cleaned_headers, cleaned = clean(headers, extracted)
+    ds = Dataset("datasets/dataset_train.csv")
 
-    target_data = get_target_feature(headers, extracted)
+    ds.clean(target_feature, features)
+
+    target_data = ds.get_target()
     
     classes = categorise_rows(target_data)
     
-    num_features = len(cleaned_headers)
+    num_features = len(features)
     num_classes = len(classes)
     
     subplot_size = 5
@@ -23,9 +37,9 @@ def main():
     
     plot_color = ["red", "deepskyblue", "springgreen", "gold"]
     
-    for x, x_feature in enumerate(cleaned_headers):
+    for x, x_feature in enumerate(features):
         
-        for y, y_feature in enumerate(cleaned_headers):
+        for y, y_feature in enumerate(features):
             
             axs[x, y].set_ylabel(x_feature, fontsize=8)
             axs[x, y].set_xlabel(y_feature, fontsize=8)
@@ -34,15 +48,15 @@ def main():
                 
                 for i, (house, indices) in enumerate(classes.items()):
                     
-                    data = [cleaned[k][x] for k in indices]
+                    data = [ds.get_data()[k][x] for k in indices]
                     axs[x, y].hist(data, color=plot_color[i], alpha=0.5, label=house)
                 
             else:
                 
                 for i, (house, indices) in enumerate(classes.items()):
                     
-                    x_data = [cleaned[i][x] for i in indices]
-                    y_data = [cleaned[i][y] for i in indices]
+                    x_data = [ds.get_data()[i][x] for i in indices]
+                    y_data = [ds.get_data()[i][y] for i in indices]
     
                     axs[x, y].scatter(x_data, y_data, color=plot_color[i], alpha=0.5, label=house)
             
@@ -51,7 +65,7 @@ def main():
     pyplot.subplots_adjust(left=0.05, bottom=0.05, right=0.95, top=0.95,
                            wspace=0.5, hspace=0.5)
 
-    pyplot.savefig("../assets/pair_plot.png")
+    pyplot.savefig("assets/pair_plot.png")
 
 if __name__ == "__main__":
 
