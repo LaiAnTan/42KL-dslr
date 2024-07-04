@@ -6,7 +6,7 @@ from stats import Statistics
 
 def main():
 
-    headers, extracted = extract("../datasets/dataset_train.csv")
+    headers, extracted = extract("datasets/dataset_train.csv")
 
     cleaned_headers, cleaned = clean(headers, extracted)
 

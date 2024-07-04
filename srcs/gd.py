@@ -134,11 +134,17 @@ class GradientDescent:
         self.model = model(init_weight, init_bias)
         self.algorithm = algorithm(learning_rate, epochs, model, debug)
     
-    def solve(self, data: list[tuple[float, float]]):
+    def fit(self, data: list[tuple[float, float]]):
         
         self.algorithm.run(data)
 
         return self.algorithm.w, self.algorithm.b
+    
+    def get_weight(self):
+        return self.model.w
+        
+    def get_bias(self):
+        return self.model.b
     
     def save(self):
         pass

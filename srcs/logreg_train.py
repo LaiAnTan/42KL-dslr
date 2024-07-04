@@ -1,30 +1,15 @@
 
+from dataset import Dataset
 from gd import GradientDescent, Batch, MiniBatch, Stochastic
 from regression import LogisticRegression
 
-def label_encoder(data: list[str]) -> list[int]:
-    
-    """
-    Encode labels with numerical values.
-    """
-    
-    unique = list(set(data))
-    
-    labels = {}
-    
-    for i, label in enumerate(unique):
-        
-        labels[label] = i
-    
-    for i, entry in enumerate(data):
-        
-        data[i] = labels[entry]
-    
-    return labels, data
-
 def main():
     
-    data = []
+    target_feature = "Hogwarts House"
+    remove_features = ["Index", "First Name", "Last Name", "Birthday", "Best Hand"]
+    
+    ds = Dataset("datasets/dataset_train.csv")
+    ds.clean(target_feature, remove_features)
     
     model = LogisticRegression
     algo = MiniBatch
@@ -33,8 +18,10 @@ def main():
     debug = True
     
     gd = GradientDescent(model, algo, lr, epochs, debug);
+    
+    data = []
 
-    w, b = gd.solve(data)
+    w, b = gd.fit(data)
     
     print(w, b)
 
