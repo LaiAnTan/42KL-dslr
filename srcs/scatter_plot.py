@@ -56,7 +56,7 @@ def main():
     pyplot.subplots_adjust(left=0.05, bottom=0.05, right=0.95, top=0.95,
                            wspace=0.5, hspace=0.5)
 
-    pyplot.savefig("assets/scatter_plot.png")
+    pyplot.savefig("graphs/scatter_plot.png")
 
 if __name__ == "__main__":
 

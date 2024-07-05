@@ -25,11 +25,11 @@ Data Analysis:
 
 Data Visualisation:
 
-`python3 srcs/histogram.py` saves a histogram to `assets` directory.
+`python3 srcs/histogram.py` saves a histogram to `graphs` directory.
 
-`python3 srcs/scatter_plot.py` saves a scatter plot to `assets` directory.
+`python3 srcs/scatter_plot.py` saves a scatter plot to `graphs` directory.
 
-`python3 srcs/pair_plot.py` saves a pair plot to `assets` directory.
+`python3 srcs/pair_plot.py` saves a pair plot to `graphs` directory.
 
 ML Model:
 
@@ -39,4 +39,4 @@ ML Model:
 
 ## Notes
 
-https://hackmd.io/mCuUujp5TNOYD08CAnKt7g#dslr
+Notes written in [notes.md](/notes.md).
