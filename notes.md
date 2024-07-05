@@ -189,11 +189,11 @@ Logistic Regression is a model used for binary classification. This means that t
 
 A linear equation does not work for this purpose as it is **unbounded**.
 
-![image](https://hackmd.io/_uploads/HkW9njRUR.png)
+![image](/assets/images/linear.png)
 
 However, the sigmoid curve fits the criteria of mapping independent variable $x$ where $x \in [-\infty, +\infty]$ to dependent variable $y$ where $y \in [0, 1]$.
 
-![image](https://hackmd.io/_uploads/HykphoAIC.png)
+![image](/assets/images/sigmoid.png)
 
 The function of a sigmoid curve is as follows:
 
@@ -249,7 +249,7 @@ $$C=-1\log(\hat{y})$$
 
 Referring to the image below:
 
-![image](https://hackmd.io/_uploads/SJK6yx1wC.png)
+![image](/assets/images/cost.png)
 
 The red graph represents $C=-1\log(\hat{y})$, and the blue graph represents $C=-1\log(1-\hat{y})$.
 
@@ -280,7 +280,7 @@ $$
 
 Calculations in the image below:
 
-![image](https://hackmd.io/_uploads/ryzn0xkDA.png)
+![image](/assets/images/dcost.png)
 
 > I am so not writing latex for this...
 
@@ -321,7 +321,7 @@ which we can use in gradient descent.
 
 ## Outcome
 
-![logreg](/assets/images/logreg.pnglogreg.png)
+![logreg](/assets/images/logreg.png)
 
 ## Sources
 
