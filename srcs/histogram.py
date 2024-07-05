@@ -73,8 +73,6 @@ def main():
                            wspace=0.5, hspace=0.5)
     
     pyplot.savefig("assets/histogram.png")
-    
-    
 
 if __name__ == "__main__":
 
