@@ -2,10 +2,6 @@
 
 A project to learn about data cleaning, data visualisation, logistic regression and multiclass classification by recreating Poulard's Sorting Hat from Harry Potter, i.e. using the One VS Rest strategy with Logistic Regression to classify Hogwarts students using academic data.
 
-![histogram](/assets/histogram.png)
-
-![pair_plot](/assets/pair_plot.png)
-
 ## Dependencies
 
 Dependencies listed in [requirements.txt](/requirements.txt)

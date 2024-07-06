@@ -92,7 +92,8 @@ class Statistics:
         
         avg = cls.mean(data)
         
-        return sum([(val - avg) ** 2 for val in data]) / len(data)
+        # sample variance
+        return sum([(val - avg) ** 2 for val in data]) / (len(data) - 1)
 
     @classmethod
     def std(cls, data: list) -> float:
@@ -100,7 +101,26 @@ class Statistics:
     
     @classmethod
     def skewness(cls, data: list) -> float:
-        return ((3 * cls.mean(data)) - cls.median(data)) / cls.std(data)
+        
+        mean = cls.mean(data)
+        std = cls.std(data)
+        n = len(data)
+        
+        # sample skewness
+        return (n / ((n - 1) * (n - 2))) * \
+            (sum([(val - mean) ** 3 for val in data])) / (std ** 3)
+    
+    @classmethod
+    def kurtosis(cls, data: list) -> float:
+        
+        mean = cls.mean(data)
+        std = cls.std(data)
+        n = len(data)
+        
+        # sample kurtosis
+        return (((n * (n - 1)) / ((n - 1) * (n - 2) * (n - 3))) * \
+            (sum([(val - mean) ** 4 for val in data])) / (std ** 4)) - \
+                ((3 * (n - 1) ** 2) / ((n - 1) * (n - 2)))
 
 if __name__ == "__main__":
     

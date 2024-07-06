@@ -46,7 +46,8 @@ class Dataset:
         "50%": Statistics.median,
         "75%": Statistics.upper_quartile,
         "IQR": Statistics.interquartile_range,
-        "Skewness": Statistics.skewness
+        "Skewness": Statistics.skewness,
+        "Kurtosis": Statistics.kurtosis
     }
     
     def __init__(self, path: str) -> None:

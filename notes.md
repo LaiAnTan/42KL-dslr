@@ -34,6 +34,135 @@ Data analysis is a key step in the machine learning process, whereby relationshi
 
 ### Statistical Functions
 
+Statistical functions help to quantify relationships in a dataset.
+
+Common statistical functions include max, min, range, lower quartile, upper quartile, mean, median, mode, interquartile range, etc.
+
+### Sample vs Population
+
+A **population** in statistics refers to **all** the items of interest in a study, which consists of all possible relevant datapoints (even ones that are not collected).
+
+A **sample** in statistics refers to a subset of the population. This is because it is almost impossible to collect all the data present in a paticular population.
+
+Since sample is a a subset of the population, descriptive statistical metrics that are calculated will have to be corrected accordingly, to improve the reliability and accuracy of the metric.
+
+> Further reading: Bessel’s Correction, Degrees of Freedom in Stastistics
+
+#### Concept of Moment
+
+Moments are certain quantitative measures related to the shape of the function's graph.
+
+> We can think of moment as taking the average of distances.
+
+The 1st moment is calculated as follows:
+
+$$
+\mu'_1 = \frac{\sum_{i=0}^{n}{x_i}}{n}
+$$
+
+where
+
+- $n$ is the number of data points
+- $x_i$ represents the $i^{th}$ data point
+
+Intuitively, the formula means that we are taking the distance of each point from zero, and finding the average of those points.
+
+We can observe that this is the just the mean of a dataset.
+
+The 2nd moment is calculated as follows:
+
+$$
+\mu'_2 = \frac{\sum_{i=0}^{n}{x_i}^2}{n}
+$$
+
+Similarly, the formula means that we are taking the squared distance of each point from zero, and finding the average of those points.
+
+Generally,
+
+$$
+\mu'_r = \frac{\sum_{i=0}^{n}{x_i}^r}{n} = E^{\,r}
+$$
+
+This formula is known as the **raw moment**, as they are calculated with respect to the origin, 0.
+
+#### Central Moments
+
+However, the raw moment is not very useful when comparing two nth moments of different datasets. To make the distinction clearer, we measure the deviation of the values **without influence from the previous moments**.
+
+For example, if we try to find the 2nd central moment:
+
+$$
+\mu_2 = \frac{\sum_{i=0}^{n}({x_i-\mu})^2}{n}
+$$
+
+We find that it is the formula for variance.
+
+Notice that we **adjusted for the first moment by subtracting the mean**.
+
+To calculate sample variance, we adjust the formula as follows:
+
+$$
+\mu_2 = \frac{\sum_{i=0}^{n}({x_i-\bar{x}})^2}{n - 1}
+$$
+
+#### Skewness
+
+The 3rd central moment is known as skewness.
+
+This is the basic formula:
+
+$$
+\mu_3 = \frac{\sum_{i=0}^{n}({x_i-\mu})^3}{n}
+$$
+
+After adjusting for the variance:
+
+$$
+\mu_3 = \frac{1}{n}\frac{\sum_{i=0}^{n}({x_i-\mu})^3}{\sigma^3}
+$$
+
+We also have to adjust the formula if we are calculating for sample skewness:
+
+$$
+\mu_3 = \frac{n}{(n-1)(n-2)}\frac{\sum_{i=0}^{n}({x_i-\bar{x}})^3}{s^3}
+$$
+
+The calculated value is a numerical representation of the skewness in a distribution.
+
+- $\mu_3 = 0$ means that the graph is generally symmetrical
+- $\mu_3 \gt 0$ means the tail on the right side of the distribution is longer, i.e. right / positive skew
+- $\mu_3 \lt 0$ means the tail on the left side of the distribution is longer, i.e. left / negative skew
+
+#### Kurtosis
+
+The 4th central moment is known as kurtosis.
+
+This is the formula for kurtosis:
+
+$$
+\mu_4 = \frac{1}{n}\frac{\sum_{i=0}^{n}({x_i-\bar{x}})^4}{\sigma^4}
+$$
+
+Notice again that we do not have to adjust for the previous moment, because the variance and kurtosis are not related. (We can find the kurtosis for a dataset with no variance just fine.)
+
+As usual, adjust the formula if we are calculating for sample kurtosis:
+
+$$
+\mu_4 = \frac{n(n + 1)}{(n-1)(n-2)(n-3)}\frac{\sum_{i=0}^{n}({x_i-\bar{x}})^4}{s^4}-\frac{3(n-1)^2}{(n-2)(n-3)}
+$$
+
+Kurtosis measures the 'tailedness' of a normal distribution.
+
+Interpreting kurtosis:
+
+- $\mu_4 \approx 3$ means that the distribution of data is **mesokurtic**, i.e. nearly normal
+- $\mu_4 \gt 3$ means the distribution of data **leptokurtic**, i.e. long tails
+- $\mu_4 \lt 3$ means the tail on the left side of the distribution is longer, i.e.  means the distribution of data **platykurtic**, i.e. short tails
+
+Refer to the graph below:
+
+![kurtosis](/assets/images/kurtosis.png)
+
 ### Data Visualisation
 
 Why do we perform data visualisation?
@@ -321,13 +450,28 @@ which we can use in gradient descent.
 
 ## Outcome
 
+I decided to fit a logistic regression model for each of the 13 features for every class, totalling to 52 models, as shown in the graph below:
+
 ![logreg](/assets/images/logreg.png)
+
+In the graph, we can observe that there are sigmoids which are more pronounced, as well as sigmoids which are not very obvious.
+
+The sigmoids that are not very obvious display what happens when we select a feature that is bad at classifying the specific class. Minimizing the cost function usually plataus at around the range of 0.4 - 0.8.
+
+The sigmoids that show an obvious distinction between 0 and 1 are the models that are able to classify the specific class well. In this case, the minimum of the cost function is below 0.1.
+
+If we use the feature with the lowest cost from each of the classes, we get a classifier with a precision accuracy of 98.25%, out of 400 samples for the test dataset!
 
 ## Sources
 
 Data Imputation
 https://medium.com/@pingsubhak/handling-missing-values-in-dataset-7-methods-that-you-need-to-know-5067d4e32b62
 https://www.analyticsvidhya.com/blog/2021/10/handling-missing-value/
+
+Moments
+
+https://youtu.be/ISaVvSO_3Sg?si=ccrfHNuIZX535K2a
+https://en.wikipedia.org/wiki/Central_moment
 
 OvO, OvR
 
