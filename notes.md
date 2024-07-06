@@ -72,7 +72,7 @@ We can observe that this is the just the mean of a dataset.
 The 2nd moment is calculated as follows:
 
 $$
-\mu'_2 = \frac{\sum_{i=0}^{n}{x_i}^2}{n}
+\mu'_2 = \frac{\sum\limits_{i=0}^{n}{x_i}^2}{n}
 $$
 
 Similarly, the formula means that we are taking the squared distance of each point from zero, and finding the average of those points.
@@ -80,7 +80,7 @@ Similarly, the formula means that we are taking the squared distance of each poi
 Generally,
 
 $$
-\mu'_r = \frac{\sum_{i=0}^{n}{x_i}^r}{n} = E^{\,r}
+\mu'_r = \frac{\sum\limits_{i=0}^{n}{x_i}^r}{n} = E^{\,r}
 $$
 
 This formula is known as the **raw moment**, as they are calculated with respect to the origin, 0.
@@ -92,7 +92,7 @@ However, the raw moment is not very useful when comparing two nth moments of dif
 For example, if we try to find the 2nd central moment:
 
 $$
-\mu_2 = \frac{\sum_{i=0}^{n}({x_i-\mu})^2}{n}
+\mu_2 = \frac{\sum\limits_{i=0}^{n}({x_i-\mu})^2}{n}
 $$
 
 We find that it is the formula for variance.
@@ -102,7 +102,7 @@ Notice that we **adjusted for the first moment by subtracting the mean**.
 To calculate sample variance, we adjust the formula as follows:
 
 $$
-\mu_2 = \frac{\sum_{i=0}^{n}({x_i-\bar{x}})^2}{n - 1}
+\mu_2 = \frac{\sum\limits_{i=0}^{n}({x_i-\bar{x}})^2}{n - 1}
 $$
 
 #### Skewness
@@ -112,19 +112,19 @@ The 3rd central moment is known as skewness.
 This is the basic formula:
 
 $$
-\mu_3 = \frac{\sum_{i=0}^{n}({x_i-\mu})^3}{n}
+\mu_3 = \frac{\sum\limits_{i=0}^{n}({x_i-\mu})^3}{n}
 $$
 
 After adjusting for the variance:
 
 $$
-\mu_3 = \frac{1}{n}\frac{\sum_{i=0}^{n}({x_i-\mu})^3}{\sigma^3}
+\mu_3 = \frac{1}{n}\frac{\sum\limits_{i=0}^{n}({x_i-\mu})^3}{\sigma^3}
 $$
 
 We also have to adjust the formula if we are calculating for sample skewness:
 
 $$
-\mu_3 = \frac{n}{(n-1)(n-2)}\frac{\sum_{i=0}^{n}({x_i-\bar{x}})^3}{s^3}
+\mu_3 = \frac{n}{(n-1)(n-2)}\frac{\sum\limits_{i=0}^{n}({x_i-\bar{x}})^3}{s^3}
 $$
 
 The calculated value is a numerical representation of the skewness in a distribution.
@@ -140,7 +140,7 @@ The 4th central moment is known as kurtosis.
 This is the formula for kurtosis:
 
 $$
-\mu_4 = \frac{1}{n}\frac{\sum_{i=0}^{n}({x_i-\bar{x}})^4}{\sigma^4}
+\mu_4 = \frac{1}{n}\frac{\sum\limits_{i=0}^{n}({x_i-\bar{x}})^4}{\sigma^4}
 $$
 
 Notice again that we do not have to adjust for the previous moment, because the variance and kurtosis are not related. (We can find the kurtosis for a dataset with no variance just fine.)
@@ -148,7 +148,7 @@ Notice again that we do not have to adjust for the previous moment, because the 
 As usual, adjust the formula if we are calculating for sample kurtosis:
 
 $$
-\mu_4 = \frac{n(n + 1)}{(n-1)(n-2)(n-3)}\frac{\sum_{i=0}^{n}({x_i-\bar{x}})^4}{s^4}-\frac{3(n-1)^2}{(n-2)(n-3)}
+\mu_4 = \frac{n(n + 1)}{(n-1)(n-2)(n-3)}\frac{\sum\limits_{i=0}^{n}({x_i-\bar{x}})^4}{s^4}-\frac{3(n-1)^2}{(n-2)(n-3)}
 $$
 
 Kurtosis measures the 'tailedness' of a normal distribution.
@@ -219,9 +219,31 @@ We also want to avoid using similar features for classification, as both the fea
 
 #### Pair Plot
 
+A pair plot is also known as a scatter plot matrix.
+
 ![pair_plot](/assets/images/pair_plot.png)
 
-boy
+> What features are you going to use for your logistic regression?
+
+Using the pair plot, and what we have learned about the dataset, we can select the features to be used in the training of the model.
+
+We know that we should not select homogenous and similar features.
+
+We also know that we need features that can classify one class from the rest well.
+
+Since we are only using one feature per logistic regression model, we have to search for the best feature for each class.
+
+After some investigation, I have produced some candidate features for each of the classes in the classifier:
+
+```python
+    feature_per_class = {
+        "Gryffindor": "Flying", # "History of Magic", "Transfiguration"
+        "Hufflepuff": "Ancient Runes",
+        "Ravenclaw": "Charms", # "Muggle Studies"
+        "Slytherin": "Divination" 
+    }
+```
+The features can be substituted for ones that are commented.
 
 ## Feature Selection
 
@@ -297,7 +319,7 @@ In softmax, each of the classes is given a proper probability that a sample belo
 The softmax function is as follows:
 
 $$
-P(y=j|x,\{w_k\}_{k=1...K}) = \frac{e^{x^\top w_j}}{\sum_{k=1}^K e^{x^\top w_k}}
+P(y=j|x,\{w_k\}_{k=1...K}) = \frac{e^{x^\top w_j}}{\sum\limits_{k=1}^K e^{x^\top w_k}}
 $$
 
 where
@@ -307,7 +329,7 @@ where
 - $w_k$: is the weight vector for class $k$. There are $K$ such vectors, one for each class
 - $x^⊤ w_j$ is the dot product of $x$ and $w_j$, represents the score (or logit) for class $j$
 - $e^{(x^⊤ w_j)}$ is the exponential of the score for class $j$
-- $∑_{k=1}^K e^{(x^⊤ w_k)}$ is the sum of exponentials of scores for all K classes. It acts as a normalizing factor to ensure probabilities sum to 1.
+- $\sum\limits_{k=1}^K e^{(x^⊤ w_k)}$ is the sum of exponentials of scores for all K classes. It acts as a normalizing factor to ensure probabilities sum to 1.
 - $K$ is the total number of classes
 
 Pretty complicated, will explore this in a future project.
