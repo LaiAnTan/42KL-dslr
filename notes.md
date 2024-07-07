@@ -319,7 +319,7 @@ In softmax, each of the classes is given a proper probability that a sample belo
 The softmax function is as follows:
 
 $$
-P(y=j|x,\{w_k\}_{k=1...K}) = \frac{e^{x^\top w_j}}{\sum\limits_{k=1}^K e^{x^\top w_k}}
+P(y=j|x,\{w_k\}_{k=1...K}) = \frac{e^{x^\top w_j}}{\sum\limits_{k=1}^{K}e^{x^\top w_k}}
 $$
 
 where
