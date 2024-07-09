@@ -10,6 +10,30 @@ class Statistics:
         return len(data)
     
     @classmethod
+    def max(cls, data: list) -> float:
+        
+        m = data[0]
+        
+        for val in data:
+            
+            if val > m:
+                m = val
+        
+        return m
+    
+    @classmethod
+    def min(cls, data: list) -> float:
+        
+        m = data[0]
+        
+        for val in data:
+            
+            if val < m:
+                m = val
+        
+        return m
+    
+    @classmethod
     def range(cls, data: list) -> float:
         return max(data) - min(data)
 
