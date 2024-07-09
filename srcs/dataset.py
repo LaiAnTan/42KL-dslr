@@ -79,50 +79,27 @@ class Dataset:
     
         """
         Function that cleans the dataset by removing unwanted features.
-        Also handles missing values.
+        Also handles missing values by imputation.
         """
-        
-        def calculate_imputation_values(target, target_idx, feature_idx, raw: list[list]):
-
-            # median of the current feature with respect to the class it is in
-            return Statistics.median([float(row[feature_idx]) for row in raw \
-                if row[feature_idx] != '' and row[target_idx] == target])
         
         global missing_count
 
-        cleaned_data = []
+        cleaned_data = [[] for _ in range(len(self.data))]
         cleaned_headers = []
-
-        include_idxs = set()
         
-        if target_feature is not None:
-            target_idx = self.headers.index(target_feature)
+        self.target = self.get_feature(target_feature)
         
-        for feature in include_features:
-            include_idxs.add(self.headers.index(feature))
-        
-        for row in self.data:
+        for i, header in enumerate(self.headers):
             
-            cleaned_row = []
-            self.target.append(row[target_idx])
-
-            for i, val in enumerate(row):
-                
-                if i not in include_idxs:
-                    continue
-                
-                #! handle missing values here
-                if val == '':
-                    missing_count += 1
-                    # median imputation for now
-                    val = calculate_imputation_values(row[target_idx], target_idx, i, self.data)
-                
-                cleaned_row.append(val)
+            if header == target_feature or header not in include_features:
+                continue
             
-            cleaned_data.append(cleaned_row)
-        
-        for i in range(len(self.headers)):
-            cleaned_headers.append(self.headers[i]) if i in include_idxs else None
+            cleaned_headers.append(header)
+            imputate_val = Statistics.median(list(filter(lambda x: x != '', self.get_feature(header))))
+            
+            for j, row in enumerate(self.data):
+
+                cleaned_data[j].append(row[i] if row[i] != '' else imputate_val)
 
         self.data = cleaned_data
         self.headers = cleaned_headers
